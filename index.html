@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ระบบงานบริการการศึกษา — พิมพ์หน้าซองจดหมาย (ขนาด A4)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#163e1b;
+    --ink-soft:#2c633c;
+    --red:#c1272d;
+    --gold:#c99a2e;
+    --bg:#eef2f6;
+    --card:#ffffff;
+    --muted:#5b6472;
+    --line:#d7dee6;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    /* font-family:'Sarabun', sans-serif; */
+    font-family: "Google Sans", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  h1,h2,h3{ font-family:'Taviraj', serif; margin:0; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
+    color:#f2f5fa;
+    padding:56px 24px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1240px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+  .postmark{ flex:0 0 auto; }
+  .hero-text{ flex:1 1 420px; min-width:280px; }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    letter-spacing:0.12em;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--gold);
+    display:inline-block;
+  }
+  .hero-text h1{
+    font-size:30px;
+    font-weight:600;
+    line-height:1.25;
+    margin-bottom:14px;
+  }
+  .hero-text p{
+    font-size:18px;
+    line-height:1.75;
+    color:#cdd7e8;
+    max-width:640px;
+  }
+  .hero-text p strong{ color:#fff; }
+
+  .about-strip{
+    max-width:1240px;
+    margin:-28px auto 0;
+    position:relative;
+    z-index:2;
+    padding:0 24px;
+  }
+  .about-card{
+    background:var(--card);
+    border-radius:14px;
+    box-shadow:0 12px 30px rgba(22,33,62,0.14);
+    padding:24px 28px;
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .about-item{ flex:1 1 220px; display:flex; gap:14px; align-items:flex-start; }
+  .about-item .num{
+    font-family: "Google Sans", sans-serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--red);
+    line-height:1;
+  }
+  .about-item p{
+    margin:6px 0 0;
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.6;
+  }
+  .about-item h3
+  { 
+    font-family: "Google Sans", sans-serif;
+    font-size:15px; 
+    font-weight:600; 
+    color:var(--ink); 
+}
+
+  /* ---------- MAIN ---------- */
+  main{
+    max-width:1240px;
+    margin:44px auto 60px;
+    padding:0 24px;
+  }
+  .section-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .section-sub{
+    color:var(--muted);
+    font-size:16px;
+    margin-bottom:26px;
+  }
+
+  .wrap{
+    display:flex;
+    gap:26px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .panel{
+    background:var(--card);
+    border-radius:12px;
+    padding:30px 30px 28px;
+    box-shadow:0 2px 10px rgba(22,33,62,0.08);
+    width:460px;
+    flex:0 0 460px;
+  }
+  .panel h2{
+    font-family: "Google Sans", sans-serif;
+    font-size:16px;
+    font-weight:600;
+    margin:24px 0 10px 0;
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .panel h2::before{
+    content:"";
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--red);
+    display:inline-block;
+  }
+  .panel h2:first-of-type{ margin-top:0; }
+
+  label{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+    margin:12px 0 5px 0;
+    font-weight:600;
+  }
+  textarea, input[type=text]{
+    width:100%;
+    font-family: "Google Sans", sans-serif;
+    font-size:14px;
+    padding:11px 13px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    resize:vertical;
+    line-height:1.6;
+    color:#000000;
+  }
+  textarea:focus, input:focus{
+    outline:none;
+    border-color:var(--ink);
+    box-shadow:0 0 0 3px rgba(22,33,62,0.1);
+  }
+
+  .btnbar{
+    margin-top:24px;
+    display:flex;
+    gap:10px;
+  }
+  button{
+    font-family: "Google Sans", sans-serif;
+    font-size:16px;
+    padding:13px 18px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    transition:transform .05s ease, background .15s ease;
+  }
+  button:active{ transform:translateY(1px); }
+  #confirmBtn{ background:var(--ink); color:#fff; flex:1; }
+  #confirmBtn:hover{ background:var(--ink-soft); }
+  #printBtn{ background:var(--red); color:#fff; }
+  #printBtn:hover{ background:#a31f24; }
+
+  .privacy-note{
+    margin-top:16px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+    display:flex;
+    gap:8px;
+  }
+
+  /* preview column with stamp-perforation edge */
+  .preview-col{ flex:1.2; min-width:480px; }
+  .preview-shell{
+    background:var(--card);
+    border-radius:12px;
+    padding:30px 16px 16px;
+    box-shadow:0 2px 10px rgba(22,33,62,0.08);
+    position:relative;
+  }
+  .stamp-edge{ position:relative; }
+  .stamp-edge::before, .stamp-edge::after{
+    content:"";
+    position:absolute;
+    left:14px; right:14px;
+    height:16px;
+    background-image:radial-gradient(circle, var(--bg) 7px, transparent 7.5px);
+    background-size:22px 16px;
+    background-repeat:repeat-x;
+    background-position:left center;
+  }
+  .stamp-edge::before{ top:-8px; }
+  .stamp-edge::after{ bottom:-8px; }
+
+  .preview-label{
+    font-size:15px;
+    color:var(--muted);
+    margin-bottom:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .preview-label .tag{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--red);
+    border:1px solid var(--red);
+    border-radius:20px;
+    padding:3px 10px;
+  }
+
+  .page-scale-wrap{ width:100%; overflow:hidden; }
+
+  #page{
+    position:relative;
+    width:297mm;
+    height:210mm;
+    background:#fff;
+    border:1px solid #ddd;
+    transform-origin:top left;
+    overflow:hidden;
+  }
+
+  .block{ position:absolute; }
+  .block-label{ font-weight:700; font-size:6.6mm; color:#111; }
+  .block-line{ font-size:5.4mm; line-height:1.6; white-space:pre-wrap; color:#111; }
+
+  #senderBlock
+  { 
+    left:10%; 
+    top:9%; 
+    width:50%; 
+}
+  #senderBlock .block-label{ margin-bottom:3.5mm; }
+
+  #permitBox{
+    left:60%; 
+    top:9%; 
+    width:35%;
+    padding:5mm 6mm;
+    border:1px solid #000;
+  }
+  #permitBox .block-line{ font-size:6mm; }
+
+  #receiverBlock{ left:37.5%; top:49%; width:50%; }
+  #receiverBlock .block-label{ margin-bottom:3.5mm; }
+
+  footer{
+    max-width:1080px;
+    margin:0 auto 50px;
+    padding:0 24px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+  }
+
+  @media print{
+    html, body{ margin:0; padding:0; background:#fff; }
+    .hero, .about-strip, footer,
+    .section-title, .section-sub,
+    .panel, .preview-label{ display:none !important; }
+ 
+    main{ max-width:none !important; margin:0 !important; padding:0 !important; }
+    .wrap{ gap:0 !important; }
+    .preview-col{ flex:none !important; min-width:0 !important; width:auto !important; }
+    .preview-shell{ padding:0 !important; box-shadow:none !important; border-radius:0 !important; }
+    .stamp-edge::before, .stamp-edge::after{ display:none !important; }
+    .page-scale-wrap{ width:auto !important; height:auto !important; }
+ 
+    #page{
+      position:static !important;
+      transform:none !important;
+      border:none !important;
+      margin:0;
+    }
+    @page{ size:A4 landscape; margin:0; }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1024px){
+    .wrap{ flex-direction:column; }
+    .panel{ width:100%; flex:1 1 auto; }
+    .preview-col{ min-width:0; width:100%; }
+  }
+
+  @media (max-width:900px){
+    .hero{ padding:44px 20px 56px; }
+    .hero-inner{ gap:28px; }
+    .postmark svg{ width:96px; height:96px; }
+    .hero-text h1{ font-size:28px; }
+    .hero-text p{ font-size:16px; }
+    .about-strip{ margin-top:-22px; }
+    .about-card{ padding:20px; gap:18px; }
+    main{ margin:36px auto 48px; }
+  }
+
+  @media (max-width:640px){
+    .hero{ padding:36px 16px 48px; text-align:center; }
+    .hero-inner{ flex-direction:column; text-align:center; }
+    .eyebrow{ justify-content:center; }
+    .hero-text p{ margin:0 auto; }
+    .hero-text h1{ font-size:24px; line-height:1.35; }
+    .about-strip{ padding:0 16px; }
+    .about-card{ flex-direction:column; padding:18px; }
+    .about-item{ flex:1 1 auto; }
+    main{ padding:0 16px; }
+    .section-title{ font-size:22px; }
+    .section-sub{ font-size:14px; margin-bottom:20px; }
+    .panel{ padding:20px 18px; }
+    .panel h2{ font-size:16px; }
+    label{ font-size:14px; }
+    textarea, input[type=text]{ font-size:16px; padding:10px 12px; }
+    .btnbar{ flex-direction:column; }
+    #printBtn{ width:100%; }
+    .preview-shell{ padding:24px 14px 16px; }
+    .preview-label{ font-size:13.5px; flex-direction:column; align-items:flex-start; gap:6px; }
+    footer{ padding:0 16px; font-size:12.5px; }
+  }
+
+  @media (max-width:400px){
+    .hero-text h1{ font-size:21px; }
+    .postmark svg{ width:80px; height:80px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="postmark">
+      <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="64" cy="64" r="60" stroke="#c99a2e" stroke-width="2" stroke-dasharray="4 5"/>
+        <circle cx="64" cy="64" r="48" stroke="#f2f5fa" stroke-width="2"/>
+        <line x1="10" y1="46" x2="118" y2="46" stroke="#f2f5fa" stroke-width="2"/>
+        <line x1="10" y1="82" x2="118" y2="82" stroke="#f2f5fa" stroke-width="2"/>
+        <text x="64" y="60" text-anchor="middle" fill="#f2f5fa" font-family="Taviraj, serif" font-size="15" font-weight="600">ที่อยู่</text>
+        <text x="64" y="78" text-anchor="middle" fill="#f2f5fa" font-family="Taviraj, serif" font-size="15" font-weight="600">หน้าซอง</text>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <div class="eyebrow">เครื่องมือฝ่ายธุรการ</div>
+      <h1>สร้างหน้าที่อยู่สำหรับซองหน้าต่าง<br>ขนาด A4 ในไม่กี่วินาที</h1>
+      <p>
+        งานเอกสารราชการและงานบัณฑิตศึกษาส่วนใหญ่ยังต้อง <strong>เขียนที่อยู่ผู้ส่ง-ผู้รับด้วยมือ</strong>
+        หรือปริ้นสติ๊กเกอร์แปะทับซองทุกครั้ง เครื่องมือนี้ให้คุณกรอกข้อมูลครั้งเดียว
+        แล้วพิมพ์ลงกระดาษ A4 เพื่อสอดเข้าซองหน้าต่างได้ทันที — ตรงตำแหน่ง อ่านง่าย และดูเป็นทางการ
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="about-strip">
+  <div class="about-card">
+    <div class="about-item">
+      <div class="num">01</div>
+      <div>
+        <h3>กรอกข้อมูลครั้งเดียว</h3>
+        <p>ผู้ส่ง ผู้รับ และเลขที่ใบอนุญาตค่าฝากส่ง กรอกในแบบฟอร์มด้านซ้าย ระบบจดจำรูปแบบให้อัตโนมัติ</p>
+      </div>
+    </div>
+    <div class="about-item">
+      <div class="num">02</div>
+      <div>
+        <h3>เห็นตำแหน่งจริงก่อนพิมพ์</h3>
+        <p>ตัวอย่างหน้ากระดาษ A4 แนวนอนแสดงตำแหน่งข้อความตรงกับที่จะสอดในซองหน้าต่างพอดี</p>
+      </div>
+    </div>
+    <div class="about-item">
+      <div class="num">03</div>
+      <div>
+        <h3>ไม่เก็บข้อมูลที่ใดเลย</h3>
+        <p>ทุกอย่างประมวลผลในเบราว์เซอร์ของคุณ ปิดหน้านี้เมื่อไหร่ ข้อมูลก็หายไปทันที ไม่มีการส่งขึ้นเซิร์ฟเวอร์</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="section-title">กรอกข้อมูลและดูตัวอย่าง</div>
+  <div class="section-sub">แก้ไขข้อความด้านซ้าย แล้วกด "ยืนยัน" เพื่ออัปเดตหน้ากระดาษด้านขวา</div>
+
+  <div class="wrap">
+
+    <div class="panel">
+
+      <h2>ผู้ส่ง</h2>
+      <label for="senderLine1">บรรทัดที่ 1 (หน่วยงาน)</label>
+      <textarea id="senderLine1" rows="1">หน่วยงาน คณะเกษตรศาสตร์ฯ มหาวิทยาลัยนเรศวร</textarea>
+
+      <label for="senderLine2">บรรทัดที่ 2 (ที่อยู่)</label>
+      <textarea id="senderLine2" rows="1">99 ม.9 ต.ท่าโพธิ์ อ.เมืองพิษณุโลก จ.พิษณุโลก 65000</textarea>
+
+      <label for="senderLine3">บรรทัดที่ 3 (งาน / ชื่อผู้ส่ง / เบอร์โทร)</label>
+      <textarea id="senderLine3" rows="1">[ชื่อส่วนงาน]  [ชื่อนามสกุลผู้ส่ง]  เบอร์โทร [เบอร์โทรผู้ส่ง]</textarea>
+
+      <h2>กล่องขวาบน (ค่าฝากส่ง / ใบอนุญาต)</h2>
+      <label for="permitLine1">บรรทัดที่ 1</label>
+      <textarea id="permitLine1" rows="1">ชำระค่าฝากส่งเป็นรายเดือน ใบอนุญาตเลขที่ 85/2521</textarea>
+
+      <label for="permitLine2">บรรทัดที่ 2</label>
+      <textarea id="permitLine2" rows="1">พิษณุโลก 65000</textarea>
+
+      <h2>ผู้รับ</h2>
+      <label for="receiverText">ชื่อและที่อยู่ผู้รับ (ขึ้นบรรทัดใหม่ = 1 บรรทัด)</label>
+      <textarea id="receiverText" rows="4">[ชื่อนามสกุลผู้รับ]  [ชื่อหน่วยงาน]  เลขที่ xxxx ถนนxxxxxx ตำบลxxxxxx อำเภอxxxxxxx จังหวัดxxxxxxx, xxxxx</textarea>
+
+      <div class="btnbar">
+        <button id="confirmBtn" onclick="renderPreview()">ยืนยัน / แสดงตัวอย่าง</button>
+        <button id="printBtn" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button>
+      </div>
+
+      <div class="privacy-note">
+        🔒 ข้อมูลทั้งหมดอยู่ในเบราว์เซอร์นี้เท่านั้น ไม่มีการส่งหรือบันทึกไว้ที่เซิร์ฟเวอร์ใด ๆ
+      </div>
+    </div>
+
+    <div class="preview-col">
+      <div class="preview-shell stamp-edge">
+        <div class="preview-label">
+          <span>ตัวอย่างหน้ากระดาษ A4 (แนวนอน)</span>
+          <span class="tag">พร้อมพิมพ์</span>
+        </div>
+        <div class="page-scale-wrap">
+          <div id="page">
+            <div class="block" id="senderBlock">
+              <div class="block-label">ชื่อและที่อยู่ผู้ส่ง</div>
+              <div class="block-line" id="outSenderLine1"></div>
+              <div class="block-line" id="outSenderLine2"></div>
+              <div class="block-line" id="outSenderLine3"></div>
+            </div>
+
+            <div class="block" id="permitBox">
+              <div class="block-line" id="outPermitLine1"></div>
+              <div class="block-line" id="outPermitLine2"></div>
+            </div>
+
+            <div class="block" id="receiverBlock">
+              <div class="block-label">ชื่อและที่อยู่ผู้รับ</div>
+              <div id="outReceiverLines"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  ออกแบบสำหรับพิมพ์ลงกระดาษ A4 เพื่อสอดในซองหน้าต่างมาตรฐาน · ทำงานฝั่งเบราว์เซอร์ทั้งหมด ไม่มีฐานข้อมูลเบื้องหลัง
+</footer>
+
+<script>
+function setText(id, value) {
+  const el = document.getElementById(id);
+  el.textContent = value && value.trim() ? value : '';
+}
+
+function renderPreview() {
+  setText('outSenderLine1', document.getElementById('senderLine1').value);
+  setText('outSenderLine2', document.getElementById('senderLine2').value);
+  setText('outSenderLine3', document.getElementById('senderLine3').value);
+
+  setText('outPermitLine1', document.getElementById('permitLine1').value);
+  setText('outPermitLine2', document.getElementById('permitLine2').value);
+
+  const receiverLines = document.getElementById('receiverText').value
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l.length > 0);
+
+  const container = document.getElementById('outReceiverLines');
+  container.innerHTML = '';
+  receiverLines.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'block-line';
+    div.textContent = line;
+    container.appendChild(div);
+  });
+
+  document.querySelector('.preview-shell').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function scalePage() {
+  const wrap = document.querySelector('.page-scale-wrap');
+  const page = document.getElementById('page');
+  page.style.transform = 'scale(1)';
+  const naturalWidth = page.offsetWidth;
+  const availableWidth = wrap.clientWidth;
+  const scale = availableWidth / naturalWidth;
+  page.style.transform = `scale(${scale})`;
+  wrap.style.height = (page.offsetHeight * scale) + 'px';
+}
+
+window.addEventListener('load', () => {
+  renderPreview();
+  scalePage();
+});
+window.addEventListener('resize', scalePage);
+</script>
+
+</body>
+</html>
